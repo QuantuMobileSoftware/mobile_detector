@@ -20,9 +20,9 @@ if __name__ == '__main__':
                         help="path to image")
     parser.add_argument("--graph_path", "-gp", type=str, required=False,
                         default=path.join(basepath, "frozen_inference_graph.pb"),
-                        help="path to image")
+                        help="path to model frozen graph *.pb file")
     parser.add_argument("--result_path", "-rp", type=str, required=False,
-                        default='result.jpg', help="path to result folder")
+                        default='result.jpg', help="path to result image")
 
     # read arguments from the command line
     args = parser.parse_args()
