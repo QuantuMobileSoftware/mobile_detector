@@ -1,6 +1,8 @@
 import argparse
 from os import path
 import time
+import logging
+import sys
 
 import numpy as np
 import cv2
@@ -8,6 +10,15 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 
 from object_detector import ObjectDetector
+
+
+logging.basicConfig(
+    stream=sys.stdout,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt=' %I:%M:%S ',
+    level="INFO"
+)
+logger = logging.getLogger('detector')
 
 
 basepath = path.dirname(__file__)
@@ -25,10 +36,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     for k, v in vars(args).items():
-        print(k, v)
+        logger.info('Arguments. {}: {}'.format(k, v))
 
     # initialize detector
-    print('model loading ...')
+    logger.info('Model loading...')
     predictor = ObjectDetector(args.graph_path)
 
     # initialize the camera and grab a reference to the raw camera capture
@@ -52,16 +63,19 @@ if __name__ == '__main__':
         # and occupied/unoccupied text
         image = frame.array
 
+        logger.info("FPS: {0:.2f}".format(frame_rate_calc))
         cv2.putText(image, "FPS: {0:.2f}".format(frame_rate_calc), (20, 20),
                     cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 0), 2, cv2.LINE_AA)
 
         result = predictor.detect(np.expand_dims(image, axis=0))
-        print(result)
 
-        for object in result[0]:
-            cv2.rectangle(image, object[0], object[1], (0, 255, 0), 2)
-            cv2.putText(image, '{}: {:.2f}'.format(object[3], object[2]),
-                        (object[0][0], object[0][1] - 5),
+        for obj in result[0]:
+            logger.info('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
+                        format(obj[0], obj[1], obj[3], obj[2]))
+
+            cv2.rectangle(image, obj[0], obj[1], (0, 255, 0), 2)
+            cv2.putText(image, '{}: {:.2f}'.format(obj[3], obj[2]),
+                        (obj[0][0], obj[0][1] - 5),
                         cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
 
 
