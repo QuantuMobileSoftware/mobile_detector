@@ -44,8 +44,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test_models.py')
 
     # add arguments
-    parser.add_argument("--model_name", "-mn", type=str, required=True,
-                        type=Models.from_string, choices=list(Models),
+    parser.add_argument("--model_name", "-mn", type=Models.from_string,
+                        required=True, choices=list(Models),
                         help="name of detection model: {}".format(list(Models)))
     parser.add_argument("--graph_path", "-gp", type=str, required=False,
                         default=path.join(basepath, "frozen_inference_graph.pb"),
