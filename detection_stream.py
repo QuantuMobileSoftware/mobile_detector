@@ -30,6 +30,13 @@ class Models(Enum):
     def __str__(self):
         return self.value
 
+    @staticmethod
+    def from_string(s):
+        try:
+            return Models[s]
+        except KeyError:
+            raise ValueError()
+
 basepath = path.dirname(__file__)
 
 if __name__ == '__main__':
@@ -38,7 +45,7 @@ if __name__ == '__main__':
 
     # add arguments
     parser.add_argument("--model_name", "-mn", type=str, required=True,
-                        choices=list(Models),
+                        type=Models.from_string, choices=list(Models),
                         help="name of detection model: {}".format(list(Models)))
     parser.add_argument("--graph_path", "-gp", type=str, required=False,
                         default=path.join(basepath, "frozen_inference_graph.pb"),
