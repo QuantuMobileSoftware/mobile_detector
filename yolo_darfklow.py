@@ -12,7 +12,7 @@ class YOLODarkflowDetector(ObjectDetector):
 
     def detect(self, frame, threshold=0.1):
         results = self.tfnet.return_predict(frame)
-        return self.__boxes_coordinates(results. threshold)
+        return self.__boxes_coordinates(results, threshold)
 
     def __boxes_coordinates(self, results, threshold):
         boxes = []
