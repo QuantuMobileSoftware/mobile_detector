@@ -27,6 +27,9 @@ class Models(Enum):
     ssd_light = 'ssd_light'
     tiny_yolo = 'tiny_yolo'
 
+    def __str__(self):
+        return self.value
+
 basepath = path.dirname(__file__)
 
 if __name__ == '__main__':
