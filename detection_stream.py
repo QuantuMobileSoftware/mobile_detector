@@ -95,7 +95,7 @@ if __name__ == '__main__':
         cv2.putText(image, "FPS: {0:.2f}".format(frame_rate_calc), (20, 20),
                     cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 0), 2, cv2.LINE_AA)
 
-        result = predictor.detect(image, axis=0)
+        result = predictor.detect(image)
 
         for obj in result[0]:
             logger.info('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
