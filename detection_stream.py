@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
         result = predictor.detect(image)
 
-        for obj in result[0]:
+        for obj in result:
             logger.info('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
                         format(obj[0], obj[1], obj[3], obj[2]))
 
