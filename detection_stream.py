@@ -3,13 +3,15 @@ from os import path
 import time
 import logging
 import sys
+from enum import Enum
 
 import numpy as np
 import cv2
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
-from object_detector import ObjectDetector
+from object_detector_detection_api import ObjectDetectorDetectionAPI
+from yolo_darfklow import YOLODarkflowDetector
 
 
 logging.basicConfig(
@@ -21,6 +23,10 @@ logging.basicConfig(
 logger = logging.getLogger('detector')
 
 
+class Models(Enum):
+    ssd_light = 'ssd_light'
+    tiny_yolo = 'tiny_yolo'
+
 basepath = path.dirname(__file__)
 
 if __name__ == '__main__':
@@ -28,9 +34,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test_models.py')
 
     # add arguments
+    parser.add_argument("--model_name", "-mn", type=str, required=True,
+                        choices=list(Models),
+                        help="name of detection model: {}".format(list(Models)))
     parser.add_argument("--graph_path", "-gp", type=str, required=False,
                         default=path.join(basepath, "frozen_inference_graph.pb"),
-                        help="path to model frozen graph *.pb file")
+                        help="path to ssdlight model frozen graph *.pb file")
+    parser.add_argument("--cfg_path", "-cfg", type=str, required=False,
+                        default=path.join(basepath, "tiny-yolo-voc.cfg"),
+                        help="path to yolo *.cfg file")
+    parser.add_argument("--weights_path", "-w", type=str, required=False,
+                        default=path.join(basepath, "tiny-yolo-voc.weights"),
+                        help="path to yolo weights *.weights file")
 
     # read arguments from the command line
     args = parser.parse_args()
@@ -40,7 +55,10 @@ if __name__ == '__main__':
 
     # initialize detector
     logger.info('Model loading...')
-    predictor = ObjectDetector(args.graph_path)
+    if args.model_name == Models.ssd_light:
+        predictor = ObjectDetectorDetectionAPI(args.graph_path)
+    elif args.model_name == Models.tiny_yolo:
+        predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
 
     # initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera()

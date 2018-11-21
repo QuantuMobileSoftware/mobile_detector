@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 
 from utils.utils import load_image_into_numpy_array
-from object_detector import ObjectDetector
+from object_detector_detection_api import ObjectDetector
 
 
 logging.basicConfig(
@@ -46,9 +46,7 @@ if __name__ == '__main__':
     image = load_image_into_numpy_array(args.image_path)
     h, w, _ = image.shape
 
-    batch = np.expand_dims(image, axis=0)
-
-    result = predictor.detect(batch)
+    result = predictor.detect(image)
 
     for obj in result[0]:
         logger.info('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
