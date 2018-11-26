@@ -12,6 +12,7 @@ from picamera import PiCamera
 
 from object_detector_detection_api import ObjectDetectorDetectionAPI
 from yolo_darfklow import YOLODarkflowDetector
+from object_detector_lite import ObjectDetectorLite
 
 
 logging.basicConfig(
@@ -26,6 +27,7 @@ logger = logging.getLogger('detector')
 class Models(Enum):
     ssd_lite = 'ssd_lite'
     tiny_yolo = 'tiny_yolo'
+    tf_lite = 'tf_lite'
 
     def __str__(self):
         return self.value
@@ -69,6 +71,8 @@ if __name__ == '__main__':
         predictor = ObjectDetectorDetectionAPI(args.graph_path)
     elif args.model_name == Models.tiny_yolo:
         predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
+    elif args.model_name == Models.tiny_yolo:
+        predictor = ObjectDetectorLite()
 
     # initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera()
