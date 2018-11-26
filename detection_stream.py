@@ -24,7 +24,7 @@ logger = logging.getLogger('detector')
 
 
 class Models(Enum):
-    ssd_light = 'ssd_light'
+    ssd_lite = 'ssd_lite'
     tiny_yolo = 'tiny_yolo'
 
     def __str__(self):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # initialize detector
     logger.info('Model loading...')
-    if args.model_name == Models.ssd_light:
+    if args.model_name == Models.ssd_lite:
         predictor = ObjectDetectorDetectionAPI(args.graph_path)
     elif args.model_name == Models.tiny_yolo:
         predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
