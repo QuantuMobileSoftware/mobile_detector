@@ -71,7 +71,7 @@ if __name__ == '__main__':
         predictor = ObjectDetectorDetectionAPI(args.graph_path)
     elif args.model_name == Models.tiny_yolo:
         predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
-    elif args.model_name == Models.tiny_yolo:
+    elif args.model_name == Models.tf_lite:
         predictor = ObjectDetectorLite()
 
     # initialize the camera and grab a reference to the raw camera capture
