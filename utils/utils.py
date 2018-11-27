@@ -1,5 +1,22 @@
 import numpy as np
 import cv2
+from enum import Enum
+
+
+class Models(Enum):
+    ssd_lite = 'ssd_lite'
+    tiny_yolo = 'tiny_yolo'
+    tf_lite = 'tf_lite'
+
+    def __str__(self):
+        return self.value
+
+    @staticmethod
+    def from_string(s):
+        try:
+            return Models[s]
+        except KeyError:
+            raise ValueError()
 
 
 MAX_AREA = 0.019  # max area from train set

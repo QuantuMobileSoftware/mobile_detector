@@ -2,12 +2,15 @@ import argparse
 from os import path
 import logging
 import sys
+import time
 
 import numpy as np
 import cv2
 
-from utils.utils import load_image_into_numpy_array
-from object_detector_detection_api import ObjectDetector
+from utils.utils import load_image_into_numpy_array, Models
+from object_detector_detection_api import ObjectDetectorDetectionAPI
+from yolo_darfklow import YOLODarkflowDetector
+from object_detector_lite import ObjectDetectorLite
 
 
 logging.basicConfig(
@@ -29,6 +32,13 @@ if __name__ == '__main__':
     # add arguments
     parser.add_argument("--image_path", "-ip", type=str, required=True,
                         help="path to image")
+    parser.add_argument("--model_name", "-mn", type=Models.from_string,
+                        required=True, choices=list(Models),
+                        help="name of detection model: {}".format(
+                        list(Models)))
+    parser.add_argument("--cfg_path", "-cfg", type=str, required=False,
+                        default=path.join(basepath, "tiny-yolo-voc.cfg"),
+                        help="path to yolo *.cfg file")
     parser.add_argument("--graph_path", "-gp", type=str, required=False,
                         default=path.join(basepath, "frozen_inference_graph.pb"),
                         help="path to model frozen graph *.pb file")
@@ -41,14 +51,24 @@ if __name__ == '__main__':
     for k, v in vars(args).items():
         logger.info('Arguments. {}: {}'.format(k, v))
 
-    predictor = ObjectDetector(args.graph_path)
+    # initialize detector
+    logger.info('Model loading...')
+    if args.model_name == Models.ssd_lite:
+        predictor = ObjectDetectorDetectionAPI(args.graph_path)
+    # elif args.model_name == Models.tiny_yolo:
+    #     predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
+    elif args.model_name == Models.tf_lite:
+        predictor = ObjectDetectorLite()
 
     image = load_image_into_numpy_array(args.image_path)
     h, w, _ = image.shape
 
+    start_time = time.time()
     result = predictor.detect(image)
+    finish_time = time.time()
+    logger.info("time spent: {:.4f}".format(finish_time - start_time))
 
-    for obj in result[0]:
+    for obj in result:
         logger.info('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
                     format(obj[0], obj[1], obj[3], obj[2]))
 
@@ -58,4 +78,3 @@ if __name__ == '__main__':
                     cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
 
     cv2.imwrite(args.result_path, cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
-    predictor.close()

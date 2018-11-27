@@ -3,8 +3,6 @@ from os import path
 import time
 import logging
 import sys
-from enum import Enum
-
 import numpy as np
 import cv2
 from picamera.array import PiRGBArray
@@ -13,6 +11,7 @@ from picamera import PiCamera
 from object_detector_detection_api import ObjectDetectorDetectionAPI
 from yolo_darfklow import YOLODarkflowDetector
 from object_detector_lite import ObjectDetectorLite
+from utils.utils import Models
 
 
 logging.basicConfig(
@@ -23,21 +22,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger('detector')
 
-
-class Models(Enum):
-    ssd_lite = 'ssd_lite'
-    tiny_yolo = 'tiny_yolo'
-    tf_lite = 'tf_lite'
-
-    def __str__(self):
-        return self.value
-
-    @staticmethod
-    def from_string(s):
-        try:
-            return Models[s]
-        except KeyError:
-            raise ValueError()
 
 basepath = path.dirname(__file__)
 

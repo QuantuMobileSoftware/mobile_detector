@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import cv2
+import time
 
 from object_detector import ObjectDetector
 
@@ -56,7 +57,10 @@ class ObjectDetectorLite(ObjectDetector):
             input_data = (np.float32(input_data) - INPUT_MEAN) / INPUT_STD
 
         self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
+        start_time = time.time()
         self.interpreter.invoke()
+        finish_time = time.time()
+        print("time spent: {:.4f}".format(finish_time - start_time))
 
         p_index = 0
         o_index = 1

@@ -1,4 +1,5 @@
 from os import path
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -58,9 +59,12 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
         """
         frames = np.expand_dims(frame, axis=0)
         # Actual detection.
+        start_time = time.time()
         (boxes, scores, classes, num) = self.sess.run(
                 [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
                 feed_dict={self.image_tensor: frames})
+        finish_time = time.time()
+        print("time spent: {:.4f}".format(finish_time - start_time))
 
         # Find detected boxes coordinates
         return [self.__boxes_coordinates(frame,
