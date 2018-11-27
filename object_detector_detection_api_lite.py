@@ -120,20 +120,20 @@ class ObjectDetectorLite(ObjectDetector):
         self.category_index = label_map_util.create_category_index(categories)
 
 
-detector = ObjectDetectorDetectionAPI()
-
-image = cv2.cvtColor(cv2.imread('dog.jpg'), cv2.COLOR_BGR2RGB)
-
-result = detector.detect(image, 0.4)
-print(result)
-
-for obj in result:
-    print('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
-                format(obj[0], obj[1], obj[3], obj[2]))
-
-    cv2.rectangle(image, obj[0], obj[1], (0, 255, 0), 2)
-    cv2.putText(image, '{}: {:.2f}'.format(obj[3], obj[2]),
-                (obj[0][0], obj[0][1] - 5),
-                cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
-
-cv2.imwrite('r1.jpg', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+# detector = ObjectDetectorDetectionAPI()
+#
+# image = cv2.cvtColor(cv2.imread('dog.jpg'), cv2.COLOR_BGR2RGB)
+#
+# result = detector.detect(image, 0.4)
+# print(result)
+#
+# for obj in result:
+#     print('coordinates: {} {}. class: "{}". confidence: {:.2f}'.
+#                 format(obj[0], obj[1], obj[3], obj[2]))
+#
+#     cv2.rectangle(image, obj[0], obj[1], (0, 255, 0), 2)
+#     cv2.putText(image, '{}: {:.2f}'.format(obj[3], obj[2]),
+#                 (obj[0][0], obj[0][1] - 5),
+#                 cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
+#
+# cv2.imwrite('r1.jpg', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
