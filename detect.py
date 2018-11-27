@@ -10,7 +10,7 @@ import cv2
 from utils.utils import load_image_into_numpy_array, Models
 from object_detector_detection_api import ObjectDetectorDetectionAPI
 from yolo_darfklow import YOLODarkflowDetector
-from object_detector_lite import ObjectDetectorLite
+from object_detector_detection_api_lite import ObjectDetectorLite
 
 
 logging.basicConfig(

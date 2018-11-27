@@ -21,7 +21,7 @@ W_SCALE = 5.0
 
 
 class ObjectDetectorLite(ObjectDetector):
-    def __init__(self, model_file='mobilenet_ssd.tflite',
+    def __init__(self, model_file='detect.tflite',
                  box_prior_file='data/box_priors.txt',
                  label_file='data/coco_labels.txt'):
         self.interpreter = tf.contrib.lite.Interpreter(model_path=model_file)
