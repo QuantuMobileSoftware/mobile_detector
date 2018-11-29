@@ -1,5 +1,4 @@
 from os import path
-import time
 
 import numpy as np
 import tensorflow as tf
@@ -34,7 +33,7 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
                 tf.import_graph_def(od_graph_def, name='')
 
         # Load lebel_map
-        self.__load_label(PATH_TO_LABELS, NUM_CLASSES, use_disp_name=True)
+        self._load_label(PATH_TO_LABELS, NUM_CLASSES, use_disp_name=True)
 
         with self.detection_graph.as_default():
             self.sess = tf.Session(graph=self.detection_graph)
@@ -59,15 +58,13 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
         """
         frames = np.expand_dims(frame, axis=0)
         # Actual detection.
-        start_time = time.time()
         (boxes, scores, classes, num) = self.sess.run(
-                [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
+                [self.detection_boxes, self.detection_scores,
+                 self.detection_classes, self.num_detections],
                 feed_dict={self.image_tensor: frames})
-        finish_time = time.time()
-        print("time spent: {:.4f}".format(finish_time - start_time))
 
         # Find detected boxes coordinates
-        return [self.__boxes_coordinates(frame,
+        return [self._boxes_coordinates(frame,
                             np.squeeze(boxes[0]),
                             np.squeeze(i[2]).astype(np.int32),
                             np.squeeze(i[3]),
@@ -75,7 +72,7 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
                             ) for i in zip(frames, boxes, classes, scores)][0]
 
 
-    def __boxes_coordinates(self,
+    def _boxes_coordinates(self,
                             image,
                             boxes,
                             classes,
@@ -121,7 +118,7 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
                                      self.category_index[classes[i]]['name']])
         return person_boxes
 
-    def __load_label(self, path, num_c, use_disp_name=True):
+    def _load_label(self, path, num_c, use_disp_name=True):
         """
             Loads labels
         """

@@ -4,7 +4,6 @@ import logging
 import sys
 import time
 
-import numpy as np
 import cv2
 
 from utils.utils import load_image_into_numpy_array, Models
@@ -55,8 +54,8 @@ if __name__ == '__main__':
     logger.info('Model loading...')
     if args.model_name == Models.ssd_lite:
         predictor = ObjectDetectorDetectionAPI(args.graph_path)
-    # elif args.model_name == Models.tiny_yolo:
-    #     predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
+    elif args.model_name == Models.tiny_yolo:
+        predictor = YOLODarkflowDetector(args.cfg_path, args.weights_path)
     elif args.model_name == Models.tf_lite:
         predictor = ObjectDetectorLite()
 
