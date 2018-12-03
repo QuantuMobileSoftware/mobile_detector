@@ -50,7 +50,7 @@ if __name__ == '__main__':
     logger.info('Model loading...')
     if args.model_name == Models.tf_trt:
         predictor = ObjectDetectorDetectionAPI(args.graph_path)
-    elif args.model_name == Models.tf_trt:
+    elif args.model_name == Models.tf_lite:
         predictor = ObjectDetectorLite(args.graph_path)
 
     cap = open_cam_onboard(640, 480)
