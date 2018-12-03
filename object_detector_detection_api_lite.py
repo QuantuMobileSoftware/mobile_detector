@@ -1,18 +1,9 @@
-from os import path
-
 import numpy as np
 import tensorflow as tf
 import cv2
 
-from object_detector_detection_api import ObjectDetectorDetectionAPI
-
-
-basepath = path.dirname(__file__)
-
-# List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = path.join(basepath, 'data', 'mscoco_label_map.pbtxt')
-
-NUM_CLASSES = 90
+from object_detector_detection_api import ObjectDetectorDetectionAPI, \
+    PATH_TO_LABELS, NUM_CLASSES
 
 
 class ObjectDetectorLite(ObjectDetectorDetectionAPI):
