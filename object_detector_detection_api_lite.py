@@ -51,6 +51,9 @@ class ObjectDetectorLite(ObjectDetectorDetectionAPI):
                             np.squeeze(scores[0]),
                             min_score_thresh=threshold)
 
+    def close(self):
+        pass
+
 
 if __name__ == '__main__':
     detector = ObjectDetectorLite()
@@ -70,3 +73,5 @@ if __name__ == '__main__':
                     cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
 
     cv2.imwrite('r1.jpg', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+
+    detector.close()

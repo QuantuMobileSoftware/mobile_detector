@@ -49,7 +49,7 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
 
     def close(self):
         tf.reset_default_graph()
-        self.sess = tf.InteractiveSession()
+        self.sess.close()
 
     def detect(self, frame, threshold=0.1):
         """

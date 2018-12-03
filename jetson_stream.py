@@ -5,8 +5,8 @@ import logging
 import sys
 import cv2
 
-# from object_detector_detection_api_lite import ObjectDetectorLite
-from object_detector_trt import ObjectDetectorTRT
+from object_detector_detection_api_lite import ObjectDetectorLite
+from object_detector_detection_api import ObjectDetectorDetectionAPI
 
 
 logging.basicConfig(
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     # initialize detector
     logger.info('Model loading...')
-    predictor = ObjectDetectorTRT()
+    predictor = ObjectDetectorDetectionAPI()
 
     cap = open_cam_onboard(640, 480)
 
