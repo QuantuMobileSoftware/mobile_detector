@@ -39,13 +39,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test_models.py')
 
     # add arguments
+    parser.add_argument("--graph_path", "-gp", type=str, required=False,
+                        default=path.join(basepath,
+                                          "frozen_inference_graph.pb"),
+                        help="path to ssdlight model frozen graph *.pb file")
 
     # read arguments from the command line
     args = parser.parse_args()
 
     # initialize detector
     logger.info('Model loading...')
-    predictor = ObjectDetectorDetectionAPI()
+    predictor = ObjectDetectorDetectionAPI(args.graph_path)
 
     cap = open_cam_onboard(640, 480)
 
@@ -89,3 +93,5 @@ if __name__ == '__main__':
         # if the `q` key was pressed, break from the loop
         if key == ord("q"):
             break
+
+    predictor.close()
