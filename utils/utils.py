@@ -4,8 +4,7 @@ from enum import Enum
 
 
 class Models(Enum):
-    ssd_lite = 'ssd_lite'
-    tiny_yolo = 'tiny_yolo'
+    tf_trt = 'tf_trt'
     tf_lite = 'tf_lite'
 
     def __str__(self):

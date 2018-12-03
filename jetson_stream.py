@@ -1,5 +1,4 @@
 import argparse
-from os import path
 import time
 import logging
 import sys
@@ -7,6 +6,7 @@ import cv2
 
 from object_detector_detection_api_lite import ObjectDetectorLite
 from object_detector_detection_api import ObjectDetectorDetectionAPI
+from utils.utils import Models
 
 
 logging.basicConfig(
@@ -16,9 +16,6 @@ logging.basicConfig(
     level="INFO"
 )
 logger = logging.getLogger('detector')
-
-
-basepath = path.dirname(__file__)
 
 
 def open_cam_onboard(width, height):
@@ -39,9 +36,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test_models.py')
 
     # add arguments
-    parser.add_argument("--graph_path", "-gp", type=str, required=False,
-                        default=path.join(basepath,
-                                          "frozen_inference_graph.pb"),
+    parser.add_argument("--model_name", "-mn", type=Models.from_string,
+                        required=True, choices=list(Models),
+                        help="name of detection model: {}".format(
+                            list(Models)))
+    parser.add_argument("--graph_path", "-gp", type=str, required=True,
                         help="path to ssdlight model frozen graph *.pb file")
 
     # read arguments from the command line
@@ -49,7 +48,10 @@ if __name__ == '__main__':
 
     # initialize detector
     logger.info('Model loading...')
-    predictor = ObjectDetectorDetectionAPI(args.graph_path)
+    if args.model_name == Models.tf_trt:
+        predictor = ObjectDetectorDetectionAPI(args.graph_path)
+    elif args.model_name == Models.tf_trt:
+        predictor = ObjectDetectorLite(args.graph_path)
 
     cap = open_cam_onboard(640, 480)
 
