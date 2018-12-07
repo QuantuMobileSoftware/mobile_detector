@@ -21,8 +21,6 @@ class ObjectDetectorDetectionAPI(ObjectDetector):
             Builds Tensorflow graph, load model and labels
         """
 
-        # model_path = path.join(basepath, graph_path)
-
         # Load Tensorflow model into memory
         self.detection_graph = tf.Graph()
         with self.detection_graph.as_default():
