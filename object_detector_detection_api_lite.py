@@ -15,6 +15,7 @@ class ObjectDetectorLite(ObjectDetectorDetectionAPI):
         # Load lebel_map
         self._load_label(PATH_TO_LABELS, NUM_CLASSES, use_disp_name=True)
 
+        # Define lite graph and Load Tensorflow Lite model into memory
         self.interpreter = tf.contrib.lite.Interpreter(
             model_path=model_path)
         self.interpreter.allocate_tensors()
@@ -27,14 +28,17 @@ class ObjectDetectorLite(ObjectDetectorDetectionAPI):
             Returns list with top-left, bottom-right coordinates and list with labels, confidence in %
         """
 
+        # Resize and normalize image for network input
         frame = cv2.resize(image, (300, 300))
         frame = np.expand_dims(frame, axis=0)
         frame = (2.0 / 255.0) * frame - 1.0
         frame = frame.astype('float32')
 
+        # run model
         self.interpreter.set_tensor(self.input_details[0]['index'], frame)
         self.interpreter.invoke()
 
+        # get results
         boxes = self.interpreter.get_tensor(
             self.output_details[0]['index'])
         classes = self.interpreter.get_tensor(
@@ -50,6 +54,9 @@ class ObjectDetectorLite(ObjectDetectorDetectionAPI):
                             np.squeeze(classes[0]+1).astype(np.int32),
                             np.squeeze(scores[0]),
                             min_score_thresh=threshold)
+
+    def close(self):
+        pass
 
 
 if __name__ == '__main__':
@@ -70,3 +77,5 @@ if __name__ == '__main__':
                     cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
 
     cv2.imwrite('r1.jpg', cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+
+    detector.close()
